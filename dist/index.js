@@ -3522,6 +3522,7 @@ function run() {
                 core.setFailed('This is not a PR');
                 return;
             }
+            core.info(pr.toString());
             const mutation = `
       mutation AddProject($prId: ID!, $projectId: ID!) {
         updatePullRequest(
