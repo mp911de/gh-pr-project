@@ -1,4 +1,4 @@
-name: PR Project
+name: PR Project Assigner
 description: Adds PR to specified project
 branding:
   icon: 'eye'
