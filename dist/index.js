@@ -3522,7 +3522,6 @@ function run() {
                 core.setFailed('This is not a PR');
                 return;
             }
-            core.info(JSON.stringify(pr));
             const mutation = `
       mutation AddProject($prId: ID!, $projectId: ID!) {
         updatePullRequest(
@@ -3532,7 +3531,7 @@ function run() {
         }
       }
     `;
-            yield gitHub.graphql(mutation, { prId: pr.key, projectId });
+            yield gitHub.graphql(mutation, { prId: pr.node_id, projectId });
         }
         catch (error) {
             core.setFailed(error.message);
