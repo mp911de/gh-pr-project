@@ -12,8 +12,6 @@ async function run(): Promise<void> {
       return
     }
 
-    core.info(JSON.stringify(pr))
-
     const mutation = `
       mutation AddProject($prId: ID!, $projectId: ID!) {
         updatePullRequest(
@@ -24,7 +22,7 @@ async function run(): Promise<void> {
       }
     `
 
-    await gitHub.graphql(mutation, {prId: pr.key, projectId})
+    await gitHub.graphql(mutation, {prId: pr.node_id, projectId})
   } catch (error) {
     core.setFailed(error.message)
   }
