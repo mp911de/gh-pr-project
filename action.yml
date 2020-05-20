@@ -1,10 +1,18 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: PR Project
+description: Adds PR to specified project
+branding:
+  icon: 'eye'
+  color: 'gray-dark'
+author: Kirill Bubochkin
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  githubToken:
+    description: 'GitHub token for commenting on a PR'
+    default: ''
+    required: true
+  projectId:
+    description: 'Project ID to add this PR to'
+    default: ''
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
