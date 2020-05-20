@@ -1,16 +1,28 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import {context, GitHub} from '@actions/github'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`)
+    const GITHUB_TOKEN = core.getInput('githubToken')
+    const projectId = core.getInput('projectId')
+    const gitHub = new GitHub(GITHUB_TOKEN)
+    const pr = context.payload.pull_request
+    if (!pr) {
+      core.setFailed('This is not a PR')
+      return
+    }
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const mutation = `
+      mutation AddProject($prId: ID!, $projectId: ID!) {
+        updatePullRequest(
+          input: {pullRequestId: $prId, projectIds: [$projectId]}
+        ) {
+          clientMutationId
+        }
+      }
+    `
 
-    core.setOutput('time', new Date().toTimeString())
+    await gitHub.graphql(mutation, {prId: pr.key, projectId})
   } catch (error) {
     core.setFailed(error.message)
   }
