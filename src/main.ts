@@ -26,7 +26,7 @@ async function run(): Promise<void> {
       const mutation = `
         mutation AddProject($id: ID!, $projectId: ID!) {
          updateIssue(
-           input: {issueId: $id, projectIds: [$projectId]}
+           input: {id: $id, projectIds: [$projectId]}
          ) {
            clientMutationId
          }

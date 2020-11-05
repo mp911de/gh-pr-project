@@ -3535,7 +3535,7 @@ function run() {
                 const mutation = `
         mutation AddProject($id: ID!, $projectId: ID!) {
          updateIssue(
-           input: {issueId: $id, projectIds: [$projectId]}
+           input: {id: $id, projectIds: [$projectId]}
          ) {
            clientMutationId
          }
