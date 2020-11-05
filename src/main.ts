@@ -7,22 +7,36 @@ async function run(): Promise<void> {
     const projectId = core.getInput('projectId')
     const gitHub = new GitHub(GITHUB_TOKEN)
     const pr = context.payload.pull_request
-    if (!pr) {
-      core.setFailed('This is not a PR')
-      return
-    }
-
-    const mutation = `
-      mutation AddProject($prId: ID!, $projectId: ID!) {
-        updatePullRequest(
-          input: {pullRequestId: $prId, projectIds: [$projectId]}
-        ) {
-          clientMutationId
+    const issue = context.payload.issue
+    if (pr) {
+      const mutation = `
+        mutation AddProject($prId: ID!, $projectId: ID!) {
+         updatePullRequest(
+           input: {pullRequestId: $prId, projectIds: [$projectId]}
+         ) {
+           clientMutationId
+         }
         }
-      }
     `
 
-    await gitHub.graphql(mutation, {prId: pr.node_id, projectId})
+     await gitHub.graphql(mutation, {prId: pr.node_id, projectId})
+    }
+    
+    if (issue) {
+      const mutation = `
+        mutation AddProject($issueId: ID!, $projectId: ID!) {
+         updateIssue(
+           input: {issueId: $issueId, projectIds: [$projectId]}
+         ) {
+           clientMutationId
+         }
+        }
+    `
+
+     await gitHub.graphql(mutation, {$issueId: issue.id, projectId})
+    }
+
+
   } catch (error) {
     core.setFailed(error.message)
   }
