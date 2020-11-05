@@ -24,16 +24,16 @@ async function run(): Promise<void> {
     
     if (issue) {
       const mutation = `
-        mutation AddProject($issueId: ID!, $projectId: ID!) {
+        mutation AddProject($id: ID!, $projectId: ID!) {
          updateIssue(
-           input: {issueId: $issueId, projectIds: [$projectId]}
+           input: {issueId: $id, projectIds: [$projectId]}
          ) {
            clientMutationId
          }
         }
     `
 
-     await gitHub.graphql(mutation, {$issueId: issue.id, projectId})
+     await gitHub.graphql(mutation, {id: issue.node_id, projectId})
     }
 
 
